@@ -1,10 +1,12 @@
 package com.example.ipcknowledgedemo;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -14,8 +16,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private IBookManager.Stub mBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +53,47 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        mBinder = new IBookManager.Stub() {
+
+            @Override
+            public List<Book> getBookList() throws RemoteException {
+                return null;
+            }
+
+            @Override
+            public void addBook(Book book) throws RemoteException {
+
+            }
+
+            @Override
+            public void registerListener(IOnNewBookArrivedListener listener) throws RemoteException {
+
+            }
+
+            @Override
+            public void unregisterListener(IOnNewBookArrivedListener listener) throws RemoteException {
+
+            }
+        };
+
+        //注册死亡监听， 第二个参数是标记位
+        mBinder.linkToDeath(deathRecipient, 0);
+
+
 
     }
+
+    //死亡监听
+    private IBinder.DeathRecipient deathRecipient = new IBinder.DeathRecipient() {
+
+        @Override
+        public void binderDied() {
+            if(mBinder != null) {
+                mBinder.unlinkToDeath(deathRecipient, 0);
+            }
+        }
+    };
+
 
     /**
      * Serializable是Java中的序列化接口，使用起来简单但是开销很大

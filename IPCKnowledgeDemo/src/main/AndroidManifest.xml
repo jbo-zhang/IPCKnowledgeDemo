@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ipcknowledgedemo">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,20 +11,45 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".contentprovider.ProviderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity"
-            android:process=":activity2"
+        <activity
+            android:name=".Main2Activity"
+            android:process=":activity2" />
+        <activity
+            android:name=".Main3Activity"
+            android:process="com.example.ipc.activity3" />
 
-            />
-        <activity android:name=".Main3Activity"
-            android:process="com.example.ipc.activity3"
-            />
+        <service
+            android:name=".messenger.MessengerService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" />
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".messenger.ParcelableReceiveActivity" />
+
+        <service
+            android:name=".aidl.BookManagerService"
+            android:enabled="true"
+            android:exported="true"
+            android:process=":remote" />
+
+        <activity android:name=".messenger.MessengerActivity" />
+
+        <provider
+            android:name=".contentprovider.BookProvider"
+            android:authorities="com.example.provider.book"
+            android:enabled="true"
+            android:permission="com.jbo.PROVIDER"
+            android:process=":provider" />
+
+        <activity android:name=".aidl.BookManagerActivity"></activity>
     </application>
 
 </manifest>
